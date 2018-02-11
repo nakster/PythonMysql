@@ -62,11 +62,12 @@ enterQ = ''
 print("\nPRESS 1 TO ADD A NEW STUDENTS")
 print("PRESS 2 TO SELECT * FROM STUDENTS")
 print("PRESS 3 TO DELETE A STUDENT FROM DATABASE")
-print("PRESS 4 TO EXIT")
+print("PRESS 4 TO UPDATE A STUDENTS")
+print("PRESS 5 TO EXIT")
 var = int(input("\nENTER A NUMBER: "))
 
 #WHILE THE OPTION IS NOT 3 THE LOOP COUNTINUES TO RUN
-while var != 4:
+while var != 5:
     #THIS OPTION ALLOWES THE USER TO ADD A STUDENT TO THE DATABASE 
     if var == 1:
         name = input("Enter a First name: ")
@@ -97,7 +98,6 @@ while var != 4:
 
         for row in results:
             i += 1
-            row += row 
             print("Student: ", i, " " , row)
     #this will delete a student from databases
     elif var == 3:
@@ -112,14 +112,49 @@ while var != 4:
             cursor.execute(query)
             db.commit()
         except:
-            db.rollback()   
+            db.rollback() 
+    #this will update the student 
+    if var == 4:
+        #ask for the name that is going to be updated 
+        NAME = input("Enter a First name that you'd like to update: ")
+
+        sql = "SELECT * FROM STUDENTS WHERE FIRST_NAMEOne like '%s'" % (NAME,)
+        cursor.execute(sql)
+        db.commit()
+        results = cursor.fetchall()
+        print("\n")
+        i =0
+
+        for row in results:
+            i += 1
+            print("Student: ", i, " " , row)
+
+        if i > 0 :
+            
+            NAMEUPDATE = input("Enter a First name to update: ")
+            UPDATELASTNAME = input("Enter a lastename to update: ")
+            UPDATE_AGE = input("Enter age to update: ")
+            UPDATE_GEND = input("Enter gender to update: ")
+            UPDATE_DEGREE = input("Enter degree to update: ")
+
+            query = "UPDATE STUDENTS SET FIRST_NAMEOne='%s', LAST_NAME='%s', Age='%s', GENDER='%s', DEGREE='%s' WHERE FIRST_NAMEONE LIKE '%s'" % (NAMEUPDATE,UPDATELASTNAME,UPDATE_AGE,UPDATE_GEND,UPDATE_DEGREE,NAME)
+
+            #TRY AND CATCH 
+            try:
+                cursor.execute(query)
+                db.commit()
+            except:
+                db.rollback() 
+        else:
+            print("Not in database")          
     else:
         print("\nYOU HAVE EXITED!!!")
 
     print("\nPRESS 1 TO ADD A NEW STUDENTS")
     print("PRESS 2 TO SELECT * FROM STUDENTS")
     print("PRESS 3 TO DELETE A STUDENT FROM DATABASE")
-    print("PRESS 4 TO EXIT")
+    print("PRESS 4 TO UPDATE A STUDENTS")
+    print("PRESS 5 TO EXIT")
     var = int(input("\nENTER A NUMBER: "))
 #end of while loop    
 db.close()
